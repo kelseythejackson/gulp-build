@@ -58,7 +58,7 @@ gulp.task('serve', () => {
 
 gulp.task('clean', ()=> {
     del(['dist']);
- });
+});
 
  gulp.task('build', ['html'], () => {
      return gulp.src(['./icons/**/**/*'])
