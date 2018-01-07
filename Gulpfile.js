@@ -14,7 +14,7 @@ const browserSync = require('browser-sync').create();
 
 
 gulp.task('scripts', ()=> {
-    return gulp.src(['./js/jquery-3.2.1.min.js','./js/circle/autogrow.js', './js/circle/circle.js', './js/global.js'])
+    return gulp.src(['./src/js/jquery-3.2.1.min.js','./src/js/circle/autogrow.js', './src/js/circle/circle.js', './src/js/global.js'])
         .pipe(maps.init())
         .pipe(concat('all.js'))
         .pipe(uglify())
@@ -24,15 +24,15 @@ gulp.task('scripts', ()=> {
 });
 
 gulp.task('sass', () => {
-    return gulp.src('./sass/**/*.scss')
+    return gulp.src('./src/sass/**/*.scss')
        .pipe(maps.init())
        .pipe(sass())
        .pipe(maps.write('.'))
-       .pipe(gulp.dest('./css'))
+       .pipe(gulp.dest('./src/css'))
 });
 
 gulp.task('styles', ['sass'], () => {
-   return gulp.src('./css/global.css')
+   return gulp.src('./src/css/global.css')
        .pipe(maps.init())
        .pipe(rename('all.min.css'))
        .pipe(csso())
@@ -43,18 +43,18 @@ gulp.task('styles', ['sass'], () => {
 });
 
 gulp.task('images', () => {
-    return gulp.src('./images/*')
+    return gulp.src('./src/images/*')
         .pipe(imgMin())
         .pipe(gulp.dest('./dist/content'))
 });
 
 gulp.task('icons', () => {
-     return gulp.src(['./icons/**/**/*'])
+     return gulp.src(['./src/icons/**/**/*'])
         .pipe(gulp.dest('./dist/icons'));
 });
 
 gulp.task('html',['icons'], () => {
-    return gulp.src('./index.html')
+    return gulp.src('./src/index.html')
     .pipe(useref())
     .pipe(replace('images/', 'content/'))
     .pipe(gulp.dest('./dist'))
@@ -62,15 +62,15 @@ gulp.task('html',['icons'], () => {
 
 gulp.task('serve', () => {
     browserSync.init({
-        server: './dist'
+        server: './src'
     });
 
-    gulp.watch('./sass/**/*.scss', ['styles']);
-    gulp.watch('./dest/index.html').on('change', browserSync.reload);
+    gulp.watch('./src/sass/**/*.scss', ['styles']);
+    gulp.watch('./src/index.html', ['styles']).on('change', browserSync.reload);
 });
 
 gulp.task('clean', ()=> {
-    del(['dist']);
+    del(['dist', './src/css']);
 });
 
  gulp.task('build', ['clean'], (callback) => {
