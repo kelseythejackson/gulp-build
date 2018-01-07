@@ -29,3 +29,6 @@ Once you're in the root folder, there are a handful of commands you cane run:
 
 * `gulp` runs the full suite and launches the server to watch for sass and html changes.
 
+## Important
+Do not make any edits to anything in the **dist** folder, all work should be done in the **src** folder.
+
