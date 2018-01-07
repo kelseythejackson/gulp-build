@@ -1,3 +1,4 @@
+// Require the correct modules
 const gulp = require('gulp');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
@@ -13,7 +14,7 @@ const del = require('del');
 const browserSync = require('browser-sync').create();
 
 
-gulp.task('scripts', ()=> {
+gulp.task('scripts', ()=> { // concatinates, minifies, renames and creates sourcemaps for the javascript
     return gulp.src(['./src/js/jquery-3.2.1.min.js','./src/js/circle/autogrow.js', './src/js/circle/circle.js', './src/js/global.js'])
         .pipe(maps.init())
         .pipe(concat('all.js'))
@@ -23,7 +24,7 @@ gulp.task('scripts', ()=> {
         .pipe(gulp.dest('./dist/scripts'));
 });
 
-gulp.task('sass', () => {
+gulp.task('sass', () => { // processes the sass
     return gulp.src('./src/sass/**/*.scss')
        .pipe(maps.init())
        .pipe(sass())
@@ -31,7 +32,7 @@ gulp.task('sass', () => {
        .pipe(gulp.dest('./src/css'))
 });
 
-gulp.task('styles', ['sass'], () => {
+gulp.task('styles', ['sass'], () => { // renames, minifies and creates sourcemaps for the css
    return gulp.src('./src/css/global.css')
        .pipe(maps.init())
        .pipe(rename('all.min.css'))
@@ -42,25 +43,25 @@ gulp.task('styles', ['sass'], () => {
 
 });
 
-gulp.task('images', () => {
+gulp.task('images', () => { // optimizes the images
     return gulp.src('./src/images/*')
         .pipe(imgMin())
         .pipe(gulp.dest('./dist/content'))
 });
 
-gulp.task('icons', () => {
+gulp.task('icons', () => { // copies over the contents of the icons folder
      return gulp.src(['./src/icons/**/**/*'])
         .pipe(gulp.dest('./dist/icons'));
 });
 
-gulp.task('html',['icons'], () => {
+gulp.task('html',['icons'], () => { // replaces the css and js code blocks, and replaces 'images' with 'content'
     return gulp.src('./src/index.html')
     .pipe(useref())
     .pipe(replace('images/', 'content/'))
     .pipe(gulp.dest('./dist'))
 });
 
-gulp.task('serve', () => {
+gulp.task('serve', () => { // launches the server and watches for the sass or html changes
     browserSync.init({
         server: './src'
     });
@@ -69,15 +70,15 @@ gulp.task('serve', () => {
     gulp.watch('./src/index.html', ['styles']).on('change', browserSync.reload);
 });
 
-gulp.task('clean', ()=> {
+gulp.task('clean', ()=> { // deletes the 'dist' and 'src/css' folder
     del(['dist', './src/css']);
 });
 
- gulp.task('build', ['clean'], (callback) => {
+ gulp.task('build', ['clean'], (callback) => { // runs the full build
      run('sass','icons', 'html', 'scripts', 'images', 'styles', callback);
  });
 
- gulp.task('default', ['build'], () => {
+ gulp.task('default', ['build'], () => { // runs the full build and launches the server
     gulp.start('serve');
  });
 
